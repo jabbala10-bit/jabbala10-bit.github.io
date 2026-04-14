@@ -177,7 +177,14 @@
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     .page { max-width: 980px; margin: 0 auto; padding: 0 1.5rem 4rem; }
 
-    nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); gap: 1rem; }
+    nav { 
+      display: flex; align-items: center; justify-content: space-between; 
+      padding: 1rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); gap: 1rem;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
     .logo { font-size: 15px; font-weight: 600; color: var(--color-text-primary); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
     .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-400); }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; }
@@ -199,6 +206,7 @@
       border-radius: var(--border-radius-md);
       color: var(--purple-600);
       cursor: pointer;
+      transition: all 0.2s ease;
       background: transparent;
     }
     .nav-cta:hover { background: var(--purple-50); }
@@ -206,12 +214,35 @@
     .badge { display: inline-flex; align-items: center; gap: 6px; background: var(--purple-50); color: var(--purple-800); font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid var(--purple-200); }
     .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple-400); }
 
-    .hero { padding: 4rem 0 3rem; text-align: center; }
+    .hero { padding: 4rem 0 3rem; text-align: center; position: relative; overflow: hidden; border-radius: var(--border-radius-lg); }
+    .hero-bg-anim {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; pointer-events: none; opacity: 0.4;
+    }
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      animation: float 20s infinite alternate ease-in-out;
+    }
+    .blob-1 {
+      width: 300px; height: 300px; background: var(--purple-400);
+      top: -100px; left: -50px; opacity: 0.6;
+    }
+    .blob-2 {
+      width: 250px; height: 250px; background: var(--blue-400);
+      bottom: -50px; right: -20px; animation-delay: -5s; opacity: 0.4;
+    }
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(60px, 40px) scale(1.2); }
+    }
     .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 600; line-height: 1.15; margin: 1rem 0 1.25rem; color: var(--color-text-primary); }
     .hero h1 span { color: var(--purple-600); }
-    .hero-sub { font-size: 16px; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto 2rem; line-height: 1.7; }
-    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary { padding: 12px 24px; background: var(--purple-600); color: white; border: none; border-radius: var(--border-radius-md); font-size: 14px; cursor: pointer; font-family: var(--font-sans); }
+    .hero-sub { font-size: 16px; color: var(--color-text-secondary); max-width: 640px; margin: 0 auto 2rem; line-height: 1.7; position: relative; }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { 
+      padding: 12px 28px; background: var(--purple-600); color: white; border: none; border-radius: var(--border-radius-md); 
+      font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font-sans); transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(83, 74, 183, 0.2); }
     .btn-primary:hover { background: var(--purple-800); }
     .btn-secondary { padding: 12px 24px; background: transparent; color: var(--color-text-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); font-size: 14px; cursor: pointer; font-family: var(--font-sans); }
     .btn-secondary:hover { background: var(--color-background-secondary); }
@@ -225,10 +256,13 @@
     .section-title { font-size: 26px; font-weight: 600; margin-bottom: .75rem; line-height: 1.25; }
     .section-sub { font-size: 15px; color: var(--color-text-secondary); line-height: 1.7; max-width: 700px; }
 
-    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 1.5rem; }
-    .problem-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 1.5rem; }
+    .problem-card { 
+      background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .problem-card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.04); }
     .problem-card .label { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: .25rem; }
-    .problem-card .val { font-size: 15px; font-weight: 500; }
+    .problem-card .val { font-size: 15px; font-weight: 600; }
     .problem-card.bad .val { color: var(--coral-400); }
     .problem-card.good .val { color: var(--teal-400); }
 
@@ -308,11 +342,105 @@
       line-height: 1.6;
     }
 
+    .arch-cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 1rem;
+    }
+    .arch-cap-card {
+      background: var(--color-background-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 1rem 1.1rem;
+      box-shadow: 0 4px 18px rgba(20, 20, 38, 0.03);
+    }
+    .arch-cap-card.span-2 {
+      grid-column: span 2;
+    }
+    .arch-cap-card.foundation .arch-cap-icon {
+      background: var(--blue-50);
+      border-color: var(--blue-200);
+      color: var(--blue-600);
+    }
+    .arch-cap-card.exec .arch-cap-icon {
+      background: var(--teal-50);
+      border-color: var(--teal-200);
+      color: var(--teal-600);
+    }
+    .arch-cap-card.moat {
+      background: linear-gradient(135deg, var(--amber-50) 0%, var(--color-background-primary) 100%);
+      border-color: var(--amber-200);
+    }
+    .arch-cap-card.moat .arch-cap-icon {
+      background: var(--amber-50);
+      border-color: var(--amber-200);
+      color: var(--amber-400);
+    }
+    .arch-cap-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: .55rem;
+    }
+    .arch-cap-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--purple-50);
+      border: 0.5px solid var(--purple-200);
+      color: var(--purple-600);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .arch-cap-kicker {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: .2rem;
+    }
+    .arch-cap-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .arch-cap-copy {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--color-text-secondary);
+      margin-bottom: .75rem;
+    }
+    .arch-cap-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .arch-cap-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 0.5px solid var(--color-border-tertiary);
+      background: var(--color-background-secondary);
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+    }
+
     [data-theme="dark"] .arch-accent-title { fill: #2E1A04; }
     [data-theme="dark"] .arch-accent-sub { fill: #5D3608; }
     [data-theme="dark"] .arch-muted-title { fill: #2F2D2B; }
     [data-theme="dark"] .arch-muted-sub { fill: #494742; }
     [data-theme="dark"] .arch-badge-text { fill: #FFF4E0; }
+    [data-theme="dark"] .arch-cap-card {
+      box-shadow: none;
+    }
     [data-theme="dark"] .arch-svg-wrap {
       background: #272446;
       border-color: #403B67;
@@ -331,12 +459,15 @@
     }
 
     .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 1.5rem; }
-    .step { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+    .step { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; transition: border-color 0.2s; }
+    .step:hover { border-color: var(--purple-200); }
     .step-num { font-size: 11px; font-weight: 600; color: var(--purple-600); background: var(--purple-50); border-radius: 20px; padding: 2px 8px; display: inline-block; margin-bottom: .5rem; border: 0.5px solid var(--purple-200); }
     .step h4 { font-size: 14px; font-weight: 600; margin-bottom: .4rem; }
     .step p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
 
-    .case-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem 1.75rem; margin-top: 1.5rem; }
+    .case-card { 
+      background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem 1.75rem; margin-top: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
     .case-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
     .case-icon { width: 36px; height: 36px; border-radius: var(--border-radius-md); background: var(--teal-50); display: flex; align-items: center; justify-content: center; border: 0.5px solid var(--teal-200); }
     .case-title { font-size: 15px; font-weight: 600; }
@@ -441,8 +572,11 @@
     }
 
     .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 1.5rem; }
-    .price-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem; }
-    .price-card.featured { border: 2px solid var(--purple-400); box-shadow: 0 8px 24px rgba(18, 18, 28, 0.07); }
+    .price-card { 
+      background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem;
+      transition: transform 0.2s ease; }
+    .price-card:hover { transform: scale(1.02); }
+    .price-card.featured { border: 2px solid var(--purple-400); box-shadow: 0 12px 32px rgba(83, 74, 183, 0.12); }
     .featured-badge { font-size: 11px; font-weight: 600; background: var(--purple-50); color: var(--purple-800); padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: .75rem; border: 0.5px solid var(--purple-200); }
     .tier-name { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: .4rem; }
     .tier-price { font-size: 28px; font-weight: 600; margin-bottom: .25rem; }
@@ -547,6 +681,9 @@
         width: 760px;
         max-width: none;
       }
+      .arch-cap-card.span-2 {
+        grid-column: auto;
+      }
       .modal-box { overflow: auto; }
     }
 
@@ -601,6 +738,10 @@
     </nav>
 
     <div class="hero reveal">
+      <div class="hero-bg-anim">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+      </div>
       <div class="badge"><div class="badge-dot"></div>Now taking 5 startups this month</div>
       <h1>Turn your startup into an<br><span>AI-first company</span> in 7 days</h1>
       <p class="hero-sub">Most teams are shipping wrappers. We design production-grade autonomous agent systems with real orchestration, memory, tool use, and safety constraints - built to scale.</p>
@@ -646,9 +787,9 @@
     <div class="arch-section reveal" id="architecture">
       <div class="section-label">How we build</div>
       <div class="section-title">CTO-level architecture, day one</div>
-      <p class="section-sub">Every system we design follows a 6-layer pattern - from API gateway to observability. No shortcuts.</p>
+      <p class="section-sub">From web, mobile, API, and event ingress to routing, execution, memory, safety, and observability, every layer is designed up front.</p>
       <div class="arch-svg-wrap">
-        <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+        <svg viewBox="0 0 760 332" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="var(--diagram-layer-control-a)"/>
@@ -666,26 +807,27 @@
             <marker id="ar2" markerWidth="7" markerHeight="5" refX="6.2" refY="2.5" orient="auto"><polygon class="arch-marker-exec" points="0 0, 7 2.5, 0 5"/></marker>
           </defs>
 
-          <rect class="arch-frame" x="18" y="12" width="724" height="296" rx="14" fill="transparent" stroke-width="1" stroke-dasharray="3 4"/>
+          <rect class="arch-frame" x="18" y="12" width="724" height="306" rx="14" fill="transparent" stroke-width="1" stroke-dasharray="3 4"/>
           <text class="arch-frame-label" x="38" y="26" font-size="10" font-family="sans-serif">LIVE AGENTOS SIGNAL FLOW</text>
 
           <text class="arch-lane-label" x="14" y="52" font-size="9" font-family="sans-serif" text-anchor="middle" transform="rotate(-90,14,52)">Input</text>
           <text class="arch-lane-label" x="14" y="120" font-size="9" font-family="sans-serif" text-anchor="middle" transform="rotate(-90,14,120)">Control</text>
           <text class="arch-lane-label" x="14" y="195" font-size="9" font-family="sans-serif" text-anchor="middle" transform="rotate(-90,14,195)">Execution</text>
-          <text class="arch-lane-label" x="14" y="270" font-size="9" font-family="sans-serif" text-anchor="middle" transform="rotate(-90,14,270)">Safety</text>
+          <text class="arch-lane-label" x="14" y="274" font-size="9" font-family="sans-serif" text-anchor="middle" transform="rotate(-90,14,274)">Safety</text>
+          <text class="arch-muted-sub" x="38" y="44" font-size="9" text-anchor="start" font-family="sans-serif">web &middot; mobile &middot; API &middot; events</text>
 
-          <g class="live-node" transform="translate(280 14)">
-            <rect class="node-core" width="200" height="38" rx="8" fill="url(#g1)" stroke="#AFA9EC" stroke-width="1.2"/>
+          <g class="live-node" transform="translate(270 18)">
+            <rect class="node-core" width="220" height="38" rx="8" fill="url(#g1)" stroke="#AFA9EC" stroke-width="1.2"/>
             <rect x="10" y="10" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#7F77DD"/>
             <line x1="32" y1="8" x2="32" y2="30" stroke="#CFCBEC" stroke-width="1"/>
             <path d="M14 18h8M18 14v8" stroke="#7F77DD" stroke-width="1.2" stroke-linecap="round"/>
-            <text class="arch-title" x="38" y="18" font-size="11" font-weight="600" text-anchor="start" font-family="sans-serif">API Gateway</text>
-            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">auth · rate limit · routing</text>
+            <text class="arch-title" x="38" y="18" font-size="11" font-weight="600" text-anchor="start" font-family="sans-serif">API Gateway + Auth</text>
+            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">auth &middot; rate limit &middot; routing</text>
           </g>
 
-          <line class="flow-line flow-control" x1="380" y1="52" x2="380" y2="68" stroke-width="1.6" marker-end="url(#ar)"/>
+          <line class="flow-line flow-control" x1="380" y1="56" x2="380" y2="70" stroke-width="1.6" marker-end="url(#ar)"/>
 
-          <g class="live-node" transform="translate(170 70)">
+          <g class="live-node" transform="translate(155 72)">
             <rect class="node-core" width="160" height="40" rx="8" fill="url(#g1)" stroke="#AFA9EC" stroke-width="1.1"/>
             <circle cx="18" cy="20" r="8" fill="#FFFFFF" stroke="#7F77DD"/>
             <line x1="32" y1="9" x2="32" y2="31" stroke="#CFCBEC" stroke-width="1"/>
@@ -693,87 +835,249 @@
             <circle cx="20" cy="18" r="1.4" fill="#7F77DD"/>
             <path d="M15 22h6" stroke="#7F77DD" stroke-width="1.1" stroke-linecap="round"/>
             <text class="arch-title" x="38" y="17" font-size="11" font-weight="600" text-anchor="start" font-family="sans-serif">Planner Agent</text>
-            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">reasoning · task decomposition</text>
+            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">CoT &middot; decompose &middot; reason</text>
           </g>
 
-          <g class="live-node" transform="translate(430 70)">
+          <g class="live-node" transform="translate(445 72)">
             <rect class="node-core" width="160" height="40" rx="8" fill="url(#g1)" stroke="#AFA9EC" stroke-width="1.1"/>
             <rect x="11" y="12" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#7F77DD"/>
             <line x1="32" y1="9" x2="32" y2="31" stroke="#CFCBEC" stroke-width="1"/>
             <path d="M18 10v4M18 26v4M9 19h4M23 19h4" stroke="#7F77DD" stroke-width="1.1" stroke-linecap="round"/>
             <text class="arch-title" x="38" y="17" font-size="11" font-weight="600" text-anchor="start" font-family="sans-serif">Orchestrator</text>
-            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">schedule · route · retry</text>
+            <text class="arch-sub" x="38" y="31" font-size="9" text-anchor="start" font-family="sans-serif">route &middot; schedule &middot; retry</text>
           </g>
 
-          <line class="flow-line flow-control fast" x1="330" y1="90" x2="428" y2="90" stroke-width="1.3"/>
-          <line class="flow-line flow-control" x1="250" y1="110" x2="250" y2="146" stroke-width="1.4" marker-end="url(#ar)"/>
-          <line class="flow-line flow-control" x1="510" y1="110" x2="510" y2="146" stroke-width="1.4" marker-end="url(#ar)"/>
+          <line class="flow-line flow-control fast" x1="315" y1="92" x2="443" y2="92" stroke-width="1.3"/>
+          <line class="flow-line flow-control" x1="235" y1="112" x2="235" y2="148" stroke-width="1.4" marker-end="url(#ar)"/>
+          <line class="flow-line flow-control" x1="525" y1="112" x2="525" y2="148" stroke-width="1.4" marker-end="url(#ar)"/>
 
-          <g class="live-node" transform="translate(50 148)">
+          <g class="live-node" transform="translate(34 150)">
             <rect class="node-core" width="120" height="40" rx="8" fill="url(#g2)" stroke="#9FE1CB" stroke-width="1.1"/>
             <circle cx="16" cy="18" r="6" fill="#FFFFFF" stroke="#1D9E75"/>
             <line x1="28" y1="10" x2="28" y2="30" stroke="#BDE7D7" stroke-width="1"/>
             <path d="M20 22l4 4" stroke="#1D9E75" stroke-width="1.2" stroke-linecap="round"/>
-            <text class="arch-title" x="33" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">Search Tool</text>
-            <text class="arch-sub" x="33" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">web · RAG · vector DB</text>
+            <text class="arch-title" x="33" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">Search Agent</text>
+            <text class="arch-sub" x="33" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">web &middot; RAG &middot; vector DB</text>
           </g>
 
-          <g class="live-node" transform="translate(190 148)">
+          <g class="live-node" transform="translate(176 150)">
             <rect class="node-core" width="120" height="40" rx="8" fill="url(#g2)" stroke="#9FE1CB" stroke-width="1.1"/>
             <rect x="9" y="10" width="18" height="18" rx="4" fill="#FFFFFF" stroke="#1D9E75"/>
             <line x1="30" y1="10" x2="30" y2="30" stroke="#BDE7D7" stroke-width="1"/>
             <path d="M12 21h5M20 21h4M15 17l2-2 2 2" stroke="#1D9E75" stroke-width="1" stroke-linecap="round"/>
             <text class="arch-title" x="35" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">Code Agent</text>
-            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">write · execute · test</text>
+            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">write &middot; exec &middot; test</text>
           </g>
 
-          <g class="live-node" transform="translate(370 148)">
+          <g class="live-node" transform="translate(318 150)">
             <rect class="node-core" width="120" height="40" rx="8" fill="url(#g2)" stroke="#9FE1CB" stroke-width="1.1"/>
             <rect x="8" y="11" width="19" height="16" rx="3" fill="#FFFFFF" stroke="#1D9E75"/>
             <line x1="30" y1="10" x2="30" y2="30" stroke="#BDE7D7" stroke-width="1"/>
             <path d="M8 19h19" stroke="#1D9E75" stroke-width="1"/>
             <text class="arch-title" x="35" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">API Agent</text>
-            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">CRM · Slack · DB calls</text>
+            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">CRM &middot; Slack &middot; DB calls</text>
           </g>
 
-          <g class="live-node" transform="translate(510 148)">
+          <g class="live-node" transform="translate(460 150)">
             <rect class="node-core" width="120" height="40" rx="8" fill="url(#g2)" stroke="#9FE1CB" stroke-width="1.1"/>
             <ellipse cx="18" cy="14" rx="8" ry="3" fill="#FFFFFF" stroke="#1D9E75"/>
             <line x1="30" y1="10" x2="30" y2="30" stroke="#BDE7D7" stroke-width="1"/>
             <path d="M10 14v7c0 1.7 3.6 3 8 3s8-1.3 8-3v-7" fill="none" stroke="#1D9E75" stroke-width="1"/>
             <text class="arch-title" x="35" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">Memory Agent</text>
-            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">short · long · episodic</text>
+            <text class="arch-sub" x="35" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">short &middot; long &middot; episodic</text>
           </g>
 
-          <line class="flow-line flow-exec" x1="110" y1="188" x2="110" y2="224" stroke-width="1.4" marker-end="url(#ar2)"/>
-          <line class="flow-line flow-exec" x1="250" y1="188" x2="250" y2="224" stroke-width="1.4" marker-end="url(#ar2)"/>
-          <line class="flow-line flow-exec" x1="430" y1="188" x2="430" y2="224" stroke-width="1.4" marker-end="url(#ar2)"/>
-          <line class="flow-line flow-exec" x1="570" y1="188" x2="570" y2="224" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <g class="live-node" transform="translate(602 150)">
+            <rect class="node-core" width="120" height="40" rx="8" fill="url(#g2)" stroke="#9FE1CB" stroke-width="1.1"/>
+            <circle cx="16" cy="18" r="6" fill="#FFFFFF" stroke="#1D9E75"/>
+            <line x1="28" y1="10" x2="28" y2="30" stroke="#BDE7D7" stroke-width="1"/>
+            <path d="M12 22h8M16 14v8" stroke="#1D9E75" stroke-width="1.1" stroke-linecap="round"/>
+            <text class="arch-title" x="33" y="17" font-size="10.5" font-weight="600" text-anchor="start" font-family="sans-serif">LLM Router</text>
+            <text class="arch-sub" x="33" y="30" font-size="8.5" text-anchor="start" font-family="sans-serif">GPT &middot; Claude &middot; local</text>
+          </g>
 
-          <g class="live-node" transform="translate(50 226)">
+          <line class="flow-line flow-exec" x1="94" y1="190" x2="94" y2="228" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec" x1="236" y1="190" x2="236" y2="228" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec" x1="378" y1="190" x2="378" y2="228" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec" x1="520" y1="190" x2="520" y2="228" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec" x1="662" y1="190" x2="662" y2="228" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+          <g class="live-node" transform="translate(34 230)">
             <rect class="node-core" width="620" height="44" rx="8" fill="url(#g3)" stroke="#EF9F27" stroke-width="1.6"/>
-            <path d="M20 244l8-5 8 5v7c0 5-5 8-8 9-3-1-8-4-8-9z" fill="#FFFFFF" stroke="#BA7517" stroke-width="1.1"/>
-            <path d="M24 248l3 3 5-5" fill="none" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="44" y1="233" x2="44" y2="263" stroke="#E9C891" stroke-width="1"/>
-            <text class="arch-accent-title" x="54" y="245" font-size="12" font-weight="600" text-anchor="start" font-family="sans-serif">Constraint Engine - Safety · Runtime Verification · DSL Rules</text>
-            <text class="arch-accent-sub" x="54" y="261" font-size="9" text-anchor="start" font-family="sans-serif">blocks unsafe actions · validates outputs · enforces policy at runtime</text>
+            <path d="M20 14l8-5 8 5v7c0 5-5 8-8 9-3-1-8-4-8-9z" fill="#FFFFFF" stroke="#BA7517" stroke-width="1.1"/>
+            <path d="M24 18l3 3 5-5" fill="none" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="44" y1="3" x2="44" y2="33" stroke="#E9C891" stroke-width="1"/>
+            <text class="arch-accent-title" x="54" y="17" font-size="12" font-weight="600" text-anchor="start" font-family="sans-serif">Constraint Engine - Runtime Safety &amp; Policy Enforcement</text>
+            <text class="arch-accent-sub" x="54" y="33" font-size="9" text-anchor="start" font-family="sans-serif">DSL rules &middot; scope verification &middot; action blocking &middot; output validation &middot; full audit trail</text>
           </g>
 
-          <line class="flow-line flow-exec slow" x1="380" y1="270" x2="380" y2="286" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec slow" x1="345" y1="274" x2="345" y2="288" stroke-width="1.4" marker-end="url(#ar2)"/>
+          <line class="flow-line flow-exec slow" x1="545" y1="274" x2="545" y2="288" stroke-width="1.4" marker-end="url(#ar2)"/>
 
-          <g class="live-node" transform="translate(170 288)">
-            <rect class="node-core arch-neutral-bg arch-neutral-stroke" width="420" height="22" rx="6" stroke-width="1"/>
-            <polyline class="arch-neutral-icon" points="12,303 18,298 24,301 30,294 36,298" fill="none" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
-            <line class="arch-neutral-divider" x1="44" y1="292" x2="44" y2="306" stroke-width="1"/>
-            <text class="arch-muted-sub" x="52" y="302" font-size="9" text-anchor="start" font-family="sans-serif">Observability - logs · traces · latency · cost tracking · alerts</text>
+          <g class="live-node" transform="translate(78 288)">
+            <rect class="node-core arch-neutral-bg arch-neutral-stroke" width="250" height="30" rx="6" stroke-width="1"/>
+            <ellipse class="arch-neutral-icon" cx="16" cy="12" rx="8" ry="3" fill="#FFFFFF"/>
+            <line class="arch-neutral-divider" x1="34" y1="6" x2="34" y2="24" stroke-width="1"/>
+            <text class="arch-muted-title" x="44" y="12" font-size="9.5" font-weight="600" text-anchor="start" font-family="sans-serif">Vector DB + Knowledge Store</text>
+            <text class="arch-muted-sub" x="44" y="23" font-size="8" text-anchor="start" font-family="sans-serif">Pinecone &middot; Weaviate &middot; pgvector &middot; document chunking</text>
           </g>
 
-          <rect class="arch-moat-bg" x="660" y="226" width="86" height="22" rx="4"/>
-          <text class="arch-moat-text" x="703" y="240" font-size="9" font-weight="600" text-anchor="middle" font-family="sans-serif">Your Moat</text>
-          <circle cx="708" cy="252" r="2" fill="#EF9F27">
+          <g class="live-node" transform="translate(360 288)">
+            <rect class="node-core arch-neutral-bg arch-neutral-stroke" width="280" height="30" rx="6" stroke-width="1"/>
+            <polyline class="arch-neutral-icon" points="12,21 19,16 26,19 33,11 40,15" fill="none" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="arch-neutral-divider" x1="52" y1="6" x2="52" y2="24" stroke-width="1"/>
+            <text class="arch-muted-title" x="62" y="12" font-size="9.5" font-weight="600" text-anchor="start" font-family="sans-serif">Observability + Cost Tracking</text>
+            <text class="arch-muted-sub" x="62" y="23" font-size="8" text-anchor="start" font-family="sans-serif">Langfuse &middot; Datadog &middot; traces &middot; P95 latency &middot; cost/query</text>
+          </g>
+
+          <rect class="arch-moat-bg" x="658" y="230" width="80" height="22" rx="4"/>
+          <text class="arch-moat-text" x="698" y="244" font-size="9" font-weight="600" text-anchor="middle" font-family="sans-serif">Your Moat</text>
+          <circle cx="703" cy="256" r="2" fill="#EF9F27">
             <animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite"/>
           </circle>
         </svg>
+      </div>
+      <div class="arch-cap-grid">
+        <div class="arch-cap-card foundation">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">IN</div>
+            <div>
+              <div class="arch-cap-kicker">Entry Points</div>
+              <div class="arch-cap-title">Web, mobile, API, and events</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">We design for multiple ingress paths from day one so the system is not trapped inside a single chat surface.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">web</span>
+            <span class="arch-cap-tag">mobile</span>
+            <span class="arch-cap-tag">API</span>
+            <span class="arch-cap-tag">events</span>
+          </div>
+        </div>
+        <div class="arch-cap-card">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">GW</div>
+            <div>
+              <div class="arch-cap-kicker">Gateway</div>
+              <div class="arch-cap-title">API Gateway auth layer</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">Request shaping happens before agent logic so reliability and security are part of the architecture, not an afterthought.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">auth</span>
+            <span class="arch-cap-tag">rate limit</span>
+            <span class="arch-cap-tag">routing</span>
+          </div>
+        </div>
+        <div class="arch-cap-card">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">PL</div>
+            <div>
+              <div class="arch-cap-kicker">Planner</div>
+              <div class="arch-cap-title">Planner Agent</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">A dedicated planner handles decomposition and reasoning instead of forcing one prompt to improvise the whole workflow.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">CoT</span>
+            <span class="arch-cap-tag">decompose</span>
+            <span class="arch-cap-tag">reason</span>
+          </div>
+        </div>
+        <div class="arch-cap-card">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">OR</div>
+            <div>
+              <div class="arch-cap-kicker">Orchestration</div>
+              <div class="arch-cap-title">Orchestrator</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">Work is routed, scheduled, and retried intentionally so agents cooperate like a system, not a fragile chain.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">route</span>
+            <span class="arch-cap-tag">schedule</span>
+            <span class="arch-cap-tag">retry</span>
+          </div>
+        </div>
+        <div class="arch-cap-card exec span-2">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">EX</div>
+            <div>
+              <div class="arch-cap-kicker">Execution Agents</div>
+              <div class="arch-cap-title">Specialists instead of one overloaded model</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">Different workloads go to retrieval, coding, or operational agents with explicit tools and success criteria.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">Search Agent: web / RAG / vector DB</span>
+            <span class="arch-cap-tag">Code Agent: write / exec / test</span>
+            <span class="arch-cap-tag">API Agent: CRM / Slack / DB calls</span>
+          </div>
+        </div>
+        <div class="arch-cap-card exec">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">MM</div>
+            <div>
+              <div class="arch-cap-kicker">Memory + Routing</div>
+              <div class="arch-cap-title">Persistent context and model selection</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">We split memory from model routing so you can preserve context while swapping between frontier and local models.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">short / long / episodic</span>
+            <span class="arch-cap-tag">GPT / Claude / local</span>
+          </div>
+        </div>
+        <div class="arch-cap-card moat span-2">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">MO</div>
+            <div>
+              <div class="arch-cap-kicker">Your Moat</div>
+              <div class="arch-cap-title">Constraint Engine - Runtime Safety &amp; Policy Enforcement</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">This is where production trust comes from: runtime guardrails that verify scope, block unsafe actions, validate outputs, and leave a full audit trail.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">DSL rules</span>
+            <span class="arch-cap-tag">scope verification</span>
+            <span class="arch-cap-tag">action blocking</span>
+            <span class="arch-cap-tag">output validation</span>
+            <span class="arch-cap-tag">full audit trail</span>
+          </div>
+        </div>
+        <div class="arch-cap-card foundation">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">KB</div>
+            <div>
+              <div class="arch-cap-kicker">Knowledge Store</div>
+              <div class="arch-cap-title">Vector DB + document chunking</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">Retrieval is backed by a real knowledge store with chunking and indexing choices matched to the product.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">Pinecone</span>
+            <span class="arch-cap-tag">Weaviate</span>
+            <span class="arch-cap-tag">pgvector</span>
+            <span class="arch-cap-tag">document chunking</span>
+          </div>
+        </div>
+        <div class="arch-cap-card foundation">
+          <div class="arch-cap-head">
+            <div class="arch-cap-icon">OB</div>
+            <div>
+              <div class="arch-cap-kicker">Observability</div>
+              <div class="arch-cap-title">Cost, latency, and trace visibility</div>
+            </div>
+          </div>
+          <p class="arch-cap-copy">Every build ships with the instrumentation needed to understand agent quality, latency, and operating cost in production.</p>
+          <div class="arch-cap-tags">
+            <span class="arch-cap-tag">Langfuse</span>
+            <span class="arch-cap-tag">Datadog</span>
+            <span class="arch-cap-tag">traces</span>
+            <span class="arch-cap-tag">P95 latency</span>
+            <span class="arch-cap-tag">cost/query</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -985,16 +1289,16 @@
         <text class="arch-lane-label" x="30" y="34" font-size="9" font-family="sans-serif">USER INPUT</text>
         <rect x="120" y="18" width="110" height="32" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1"/>
         <rect x="126" y="26" width="12" height="12" rx="3" fill="#FFFFFF" stroke="#7F77DD"/>
-        <text class="arch-title" x="144" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Web / API</text>
-        <text class="arch-sub" x="144" y="42" font-size="8" text-anchor="start" font-family="sans-serif">REST · GraphQL · WS</text>
+        <text class="arch-title" x="144" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Web / Mobile</text>
+        <text class="arch-sub" x="144" y="42" font-size="8" text-anchor="start" font-family="sans-serif">app · chat · forms</text>
         <rect x="250" y="18" width="110" height="32" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1"/>
         <circle cx="264" cy="34" r="6" fill="#FFFFFF" stroke="#7F77DD"/>
-        <text class="arch-title" x="273" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Event Stream</text>
-        <text class="arch-sub" x="273" y="42" font-size="8" text-anchor="start" font-family="sans-serif">Kafka · SQS · webhooks</text>
+        <text class="arch-title" x="273" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">API</text>
+        <text class="arch-sub" x="273" y="42" font-size="8" text-anchor="start" font-family="sans-serif">REST · GraphQL · webhooks</text>
         <rect x="380" y="18" width="110" height="32" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1"/>
         <rect x="388" y="26" width="12" height="12" rx="2" fill="#FFFFFF" stroke="#7F77DD"/>
-        <text class="arch-title" x="404" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Scheduled Jobs</text>
-        <text class="arch-sub" x="404" y="42" font-size="8" text-anchor="start" font-family="sans-serif">cron · triggers</text>
+        <text class="arch-title" x="404" y="30" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Events</text>
+        <text class="arch-sub" x="404" y="42" font-size="8" text-anchor="start" font-family="sans-serif">queues · cron · triggers</text>
 
         <line class="flow-line flow-control" x1="175" y1="50" x2="280" y2="78" stroke-width="1.4" marker-end="url(#mar)"/>
         <line class="flow-line flow-control" x1="305" y1="50" x2="305" y2="78" stroke-width="1.4" marker-end="url(#mar)"/>
@@ -1002,20 +1306,20 @@
 
         <rect x="180" y="80" width="260" height="36" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1.5"/>
         <rect x="190" y="91" width="12" height="12" rx="3" fill="#FFFFFF" stroke="#7F77DD"/>
-        <text class="arch-title" x="208" y="96" font-size="11" font-weight="500" text-anchor="start" font-family="sans-serif">API Gateway + Auth Layer</text>
-        <text class="arch-sub" x="208" y="109" font-size="8" text-anchor="start" font-family="sans-serif">JWT · rate limiting · request logging · routing</text>
+        <text class="arch-title" x="208" y="96" font-size="11" font-weight="500" text-anchor="start" font-family="sans-serif">API Gateway + Auth</text>
+        <text class="arch-sub" x="208" y="109" font-size="8" text-anchor="start" font-family="sans-serif">auth · rate limit · routing</text>
 
         <line class="flow-line flow-control" x1="310" y1="116" x2="310" y2="134" stroke-width="1.4" marker-end="url(#mar)"/>
 
         <rect x="100" y="136" width="160" height="40" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1.5"/>
         <circle cx="114" cy="156" r="8" fill="#FFFFFF" stroke="#7F77DD"/>
         <text class="arch-title" x="128" y="152" font-size="11" font-weight="500" text-anchor="start" font-family="sans-serif">Planner Agent</text>
-        <text class="arch-sub" x="128" y="165" font-size="8" text-anchor="start" font-family="sans-serif">CoT reasoning · task decompose</text>
+        <text class="arch-sub" x="128" y="165" font-size="8" text-anchor="start" font-family="sans-serif">CoT · decompose · reason</text>
 
         <rect x="360" y="136" width="160" height="40" rx="6" fill="url(#mg1)" stroke="#AFA9EC" stroke-width="1.5"/>
         <rect x="372" y="148" width="12" height="12" rx="3" fill="#FFFFFF" stroke="#7F77DD"/>
         <text class="arch-title" x="388" y="152" font-size="11" font-weight="500" text-anchor="start" font-family="sans-serif">Orchestrator</text>
-        <text class="arch-sub" x="388" y="165" font-size="8" text-anchor="start" font-family="sans-serif">route · retry · parallelise</text>
+        <text class="arch-sub" x="388" y="165" font-size="8" text-anchor="start" font-family="sans-serif">route · schedule · retry</text>
 
         <line class="flow-line flow-control" x1="260" y1="156" x2="358" y2="156" stroke-width="1.2"/>
         <line class="flow-line flow-control" x1="180" y1="176" x2="180" y2="210" stroke-width="1.3" marker-end="url(#mar)"/>
@@ -1024,17 +1328,17 @@
         <rect x="30" y="212" width="110" height="38" rx="6" fill="url(#mg2)" stroke="#9FE1CB" stroke-width="1"/>
         <circle cx="43" cy="226" r="6" fill="#FFFFFF" stroke="#1D9E75"/>
         <text class="arch-title" x="54" y="226" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Search Agent</text>
-        <text class="arch-sub" x="54" y="239" font-size="8" text-anchor="start" font-family="sans-serif">web · semantic · RAG</text>
+        <text class="arch-sub" x="54" y="239" font-size="8" text-anchor="start" font-family="sans-serif">web · RAG · vector DB</text>
 
         <rect x="155" y="212" width="110" height="38" rx="6" fill="url(#mg2)" stroke="#9FE1CB" stroke-width="1"/>
         <rect x="165" y="221" width="12" height="12" rx="3" fill="#FFFFFF" stroke="#1D9E75"/>
         <text class="arch-title" x="181" y="226" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">Code Agent</text>
-        <text class="arch-sub" x="181" y="239" font-size="8" text-anchor="start" font-family="sans-serif">write · run · validate</text>
+        <text class="arch-sub" x="181" y="239" font-size="8" text-anchor="start" font-family="sans-serif">write · exec · test</text>
 
         <rect x="280" y="212" width="110" height="38" rx="6" fill="url(#mg2)" stroke="#9FE1CB" stroke-width="1"/>
         <rect x="291" y="220" width="12" height="12" rx="2" fill="#FFFFFF" stroke="#1D9E75"/>
         <text class="arch-title" x="308" y="226" font-size="10" font-weight="500" text-anchor="start" font-family="sans-serif">API Agent</text>
-        <text class="arch-sub" x="308" y="239" font-size="8" text-anchor="start" font-family="sans-serif">CRM · Slack · DBs</text>
+        <text class="arch-sub" x="308" y="239" font-size="8" text-anchor="start" font-family="sans-serif">CRM · Slack · DB calls</text>
 
         <rect x="405" y="212" width="110" height="38" rx="6" fill="url(#mg2)" stroke="#9FE1CB" stroke-width="1"/>
         <ellipse cx="418" cy="224" rx="7" ry="3" fill="#FFFFFF" stroke="#1D9E75"/>
@@ -1057,7 +1361,7 @@
         <path d="M48 309l3 3 5-5" fill="none" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
         <line x1="68" y1="293" x2="68" y2="326" stroke="#E9C891" stroke-width="1"/>
         <text class="arch-accent-title" x="78" y="305" font-size="12" font-weight="600" text-anchor="start" font-family="sans-serif">Constraint Engine - Runtime Safety &amp; Policy Enforcement</text>
-        <text class="arch-accent-sub" x="78" y="320" font-size="9" text-anchor="start" font-family="sans-serif">DSL rules · scope verification · output validation · action blocking · audit trail</text>
+        <text class="arch-accent-sub" x="78" y="320" font-size="9" text-anchor="start" font-family="sans-serif">DSL rules · scope verification · action blocking · output validation · full audit trail</text>
         <rect class="arch-moat-bg" x="660" y="290" width="74" height="20" rx="3"/>
         <text class="arch-moat-text" x="697" y="303" font-size="9" font-weight="600" text-anchor="middle" font-family="sans-serif">Your Moat</text>
 
@@ -1067,17 +1371,17 @@
         <ellipse class="arch-neutral-icon" cx="45" cy="372" rx="8" ry="3" fill="#FFFFFF"/>
         <line class="arch-neutral-divider" x1="62" y1="364" x2="62" y2="386" stroke-width="1"/>
         <text class="arch-muted-title" x="72" y="372" font-size="10" font-weight="600" text-anchor="start" font-family="sans-serif">Vector DB + Knowledge Store</text>
-        <text class="arch-muted-sub" x="72" y="384" font-size="8" text-anchor="start" font-family="sans-serif">Pinecone · Weaviate · pgvector</text>
+        <text class="arch-muted-sub" x="72" y="384" font-size="8" text-anchor="start" font-family="sans-serif">Pinecone · Weaviate · pgvector · document chunking</text>
 
         <rect class="arch-neutral-bg arch-neutral-stroke" x="340" y="358" width="330" height="34" rx="6" stroke-width="1"/>
         <polyline class="arch-neutral-icon" points="352,379 359,374 366,377 373,369 380,373" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
         <line class="arch-neutral-divider" x1="372" y1="364" x2="372" y2="386" stroke-width="1"/>
         <text class="arch-muted-title" x="382" y="372" font-size="10" font-weight="600" text-anchor="start" font-family="sans-serif">Observability + Cost Tracking</text>
-        <text class="arch-muted-sub" x="382" y="384" font-size="8" text-anchor="start" font-family="sans-serif">Langfuse · Datadog · custom traces · cost/query</text>
+        <text class="arch-muted-sub" x="382" y="384" font-size="8" text-anchor="start" font-family="sans-serif">Langfuse · Datadog · traces · P95 latency · cost/query</text>
       </svg>
       <div class="diagram-note">
-        <p class="diagram-note-title">The constraint engine is your unfair advantage</p>
-        <p class="diagram-note-sub">No other consultancy is explicitly designing runtime constraint layers into agent systems. This is what separates production-grade agents from demos and builds confidence for autonomous deployment.</p>
+        <p class="diagram-note-title">Constraint-verified autonomy is the moat</p>
+        <p class="diagram-note-sub">The safety layer is what turns agent ambition into a production system: policy enforcement, scope checks, output validation, and a full audit trail built into runtime behavior.</p>
       </div>
     </div>
   </div>
