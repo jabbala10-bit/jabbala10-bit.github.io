@@ -1,0 +1,22 @@
+name: Send Email on Lead
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Email
+        run: |
+          curl -X POST https://api.resend.com/emails \
+          -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "from": "onboarding@resend.dev",
+            "to": "your@email.com",
+            "subject": "New Lead",
+            "html": "${{ github.event.issue.body }}"
+          }'

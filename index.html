@@ -669,6 +669,32 @@
       line-height: 1.5;
     }
 
+    .lead-status {
+      grid-column: 1 / -1;
+      min-height: 1.2rem;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .lead-status[data-state="loading"] {
+      color: var(--color-text-tertiary);
+    }
+
+    .lead-status[data-state="success"] {
+      color: var(--teal-600);
+    }
+
+    .lead-status[data-state="error"] {
+      color: var(--coral-400);
+    }
+
+    .btn-primary:disabled,
+    .btn-secondary:disabled,
+    .tier-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
     @media (max-width: 760px) {
       .nav-links { display: none; }
       .hero { padding: 2.5rem 0 2rem; }
@@ -1419,9 +1445,10 @@
           <textarea id="leadUseCase" name="useCase" required placeholder="What do you want your agent system to automate?"></textarea>
         </div>
         <div class="lead-actions">
-          <button class="btn-primary" type="submit">Send request</button>
+          <button class="btn-primary" id="leadSubmitButton" type="submit">Send request</button>
           <button class="btn-secondary" type="button" onclick="closeLeadModal()">Cancel</button>
         </div>
+        <p class="lead-status" id="leadStatus" aria-live="polite"></p>
         <p class="lead-note">We usually reply within one business day. Your details stay private and are used only for scheduling this call.</p>
       </form>
     </div>
@@ -1468,10 +1495,12 @@
     }
 
     function openLeadModal() {
+      resetLeadFormFeedback();
       document.getElementById("leadModal").classList.add("open");
     }
 
     function closeLeadModal() {
+      resetLeadFormFeedback();
       document.getElementById("leadModal").classList.remove("open");
     }
 
@@ -1481,25 +1510,63 @@
       }
     }
 
-    function submitLead(e) {
+    function setLeadStatus(message, state) {
+      var status = document.getElementById("leadStatus");
+      status.textContent = message || "";
+      if (state) {
+        status.setAttribute("data-state", state);
+      } else {
+        status.removeAttribute("data-state");
+      }
+    }
+
+    function resetLeadFormFeedback() {
+      var button = document.getElementById("leadSubmitButton");
+      setLeadStatus("", "");
+      button.disabled = false;
+      button.textContent = "Send request";
+    }
+
+    async function submitLead(e) {
       e.preventDefault();
       var form = document.getElementById("leadForm");
-      var data = new FormData(form);
-      var body = [
-        "Hi AgentOS Labs,",
-        "",
-        "I want to book a strategy call.",
-        "",
-        "Name: " + data.get("name"),
-        "Email: " + data.get("email"),
-        "Company: " + data.get("company"),
-        "Team size: " + data.get("teamSize"),
-        "Use case: " + data.get("useCase")
-      ].join("\n");
+      var button = document.getElementById("leadSubmitButton");
+      var payload = Object.fromEntries(new FormData(form).entries());
 
-      window.location.href = "mailto:founders@agentoslabs.com?subject=Strategy%20Call%20Request&body=" + encodeURIComponent(body);
-      form.reset();
-      closeLeadModal();
+      button.disabled = true;
+      button.textContent = "Sending...";
+      setLeadStatus("Sending your request...", "loading");
+
+      try {
+        var response = await fetch("/api/lead", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        var result = {};
+        try {
+          result = await response.json();
+        } catch (parseError) {
+          result = {};
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Could not send request. Please try again.");
+        }
+
+        setLeadStatus("Request sent. We will reply within one business day.", "success");
+        form.reset();
+        window.setTimeout(function () {
+          closeLeadModal();
+        }, 900);
+      } catch (error) {
+        setLeadStatus(error.message || "Could not send request. Please try again.", "error");
+        button.disabled = false;
+        button.textContent = "Send request";
+      }
     }
 
     var themeSwitch = document.getElementById("themeSwitch");
