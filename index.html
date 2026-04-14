@@ -1527,6 +1527,22 @@
       button.textContent = "Send request";
     }
 
+    function getLeadApiUrl() {
+      if (window.LEAD_API_URL) {
+        return window.LEAD_API_URL;
+      }
+
+      var host = window.location.hostname;
+      var isLocalPreview = window.location.protocol === "file:" || host === "localhost" || host === "127.0.0.1";
+      var isGitHubPages = host === "jabbala10-bit.github.io" || host.slice(-10) === ".github.io";
+
+      if (isLocalPreview || isGitHubPages) {
+        return "https://jabbala10-bit-github-io.vercel.app/api/lead";
+      }
+
+      return "/api/lead";
+    }
+
     async function submitLead(e) {
       e.preventDefault();
       var form = document.getElementById("leadForm");
@@ -1538,7 +1554,7 @@
       setLeadStatus("Sending your request...", "loading");
 
       try {
-        var response = await fetch("https://jabbala10-bit-github-io.vercel.app/api/lead", {
+        var response = await fetch(getLeadApiUrl(), {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

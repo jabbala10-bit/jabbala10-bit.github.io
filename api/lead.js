@@ -1,6 +1,14 @@
 const RESEND_API_URL = "https://api.resend.com/emails";
 const DEFAULT_TO_EMAIL = "founders@agentoslabs.com";
 const DEFAULT_FROM_EMAIL = "AgentOS Labs <onboarding@resend.dev>";
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://jabbala10-bit.github.io",
+  "https://jabbala10-bit-github-io.vercel.app",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:5500",
+  "http://127.0.0.1:5500"
+];
 
 function normalize(value) {
   return String(value || "").trim();
@@ -17,6 +25,38 @@ function escapeHtml(value) {
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function getAllowedOrigins() {
+  const configuredOrigins = normalize(process.env.ALLOWED_ORIGINS);
+
+  if (!configuredOrigins) {
+    return DEFAULT_ALLOWED_ORIGINS;
+  }
+
+  return configuredOrigins
+    .split(",")
+    .map(function (origin) {
+      return origin.trim();
+    })
+    .filter(Boolean);
+}
+
+function applyCors(req, res) {
+  const origin = req.headers.origin;
+  const allowedOrigins = getAllowedOrigins();
+  const isAllowed = !origin || allowedOrigins.indexOf(origin) !== -1;
+
+  res.setHeader("Vary", "Origin");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Max-Age", "86400");
+
+  if (origin && isAllowed) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  return isAllowed;
 }
 
 function buildTextEmail(lead) {
@@ -61,6 +101,16 @@ async function parseBody(req) {
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
+
+  const isAllowedOrigin = applyCors(req, res);
+
+  if (req.method === "OPTIONS") {
+    return res.status(isAllowedOrigin ? 204 : 403).end();
+  }
+
+  if (!isAllowedOrigin) {
+    return res.status(403).json({ error: "Origin not allowed." });
+  }
 
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
